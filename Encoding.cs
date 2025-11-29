@@ -1,6 +1,6 @@
 namespace Binary_Serialization;
 
-public static class Coding
+public static class Encoding
 {
     public static int[] Encode(string input)
     {

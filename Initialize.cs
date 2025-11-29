@@ -27,9 +27,9 @@ namespace Binary_Serialization
 		{
 			using (var stream = File.Open(FileName, FileMode.Append))
 			{
-				using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
+				using (var writer = new BinaryWriter(stream, System.Text.Encoding.UTF8, false))
 				{
-					foreach (int num in Coding.Encode(input))
+					foreach (int num in Encoding.Encode(input))
 					{
 						writer.Write(num);
 					}
@@ -46,7 +46,7 @@ namespace Binary_Serialization
 			
 			using (var stream = File.Open(FileName, FileMode.Open))
 			{
-				using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+				using (var reader = new BinaryReader(stream, System.Text.Encoding.UTF8, false))
 				{
 					while (reader.BaseStream.Position != reader.BaseStream.Length)
 					{
