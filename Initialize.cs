@@ -1,54 +1,68 @@
-﻿namespace Binary_Serialization
+﻿using System.Text;
+
+namespace Binary_Serialization
 {
 	internal class Initialize
 	{
-		private static readonly char[] Characters =
-		{
-			' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
-			'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
-		};
+		private const string FileName = "binary_data";
 		
 		private static void Main(string[] args)
 		{
-			foreach (string str in EncryptString("Hello 007"))
-			{
-				Console.Write(str + " ");
-			}
+			Save();
+			
+			Load();
 		}
 
-		public static string[] EncryptString(string input)
+		private static void Save()
+		{			
+			using (File.Open(FileName, FileMode.Create));
+
+			SaveData("Lorem ipsum dolor sit amet,");
+			SaveData("consectetur adipiscing elit.");
+			SaveData("Etiam nec metus quis eros vulputate aliquam!!");
+			SaveData("15.40 29-11-25");
+		}
+
+		private static void SaveData(string input)
 		{
-			//complex aff
-			
-			input = input.ToLower();
-
-			List<string> binary = new List<string>();
-			
-			int guide = new Random().Next(100, 127);
-
-			binary.Add(Convert.ToString(guide, 2));
-
-			binary.Add(Convert.ToString(guide - input.Length, 2));
-
-			foreach (char character in input)
+			using (var stream = File.Open(FileName, FileMode.Append))
 			{
-				for (int j = 0; j < Characters.Length; j++)
+				using (var writer = new BinaryWriter(stream, Encoding.UTF8, false))
 				{
-					if (character.Equals(Characters[j]))
+					foreach (int num in Coding.Encode(input))
 					{
-						binary.Add(Convert.ToString(guide - j, 2));
+						writer.Write(num);
 					}
 				}
 			}
-
-			return binary.ToArray();
 		}
-
-		public static string DecryptString(string[] input)
+		
+		private static void Load()
 		{
+			if(!File.Exists(FileName))
+			{
+				Console.WriteLine("No saved data found!"); return;
+			}
 			
-			
-			return "ss";
+			using (var stream = File.Open(FileName, FileMode.Open))
+			{
+				using (var reader = new BinaryReader(stream, Encoding.UTF8, false))
+				{
+					while (reader.BaseStream.Position != reader.BaseStream.Length)
+					{
+						int offset = reader.ReadInt32();
+						int length = offset - reader.ReadInt32();
+						string data = ""; 
+					
+						for (int i = 0; i < length; i++)
+						{
+							data += (char)(offset - reader.ReadInt32());
+						}
+
+						Console.WriteLine(data);
+					}
+				}
+			}
 		}
 	}
 }
