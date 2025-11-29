@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Binary_Serialization;
 
 public static class Encoding
@@ -6,7 +9,7 @@ public static class Encoding
     {
         List<int> sector = new List<int>();
 
-        sector.Add(new Random().Next(0, 512));
+        sector.Add(new Random().Next(256, 512));
         
         sector.Add(sector[0] - input.Length);
         
