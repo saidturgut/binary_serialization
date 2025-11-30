@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-
 namespace Binary_Serialization;
 
 public static class Encoding
 {
     public static int[] Encode(string input)
     {
-        List<int> sector = new List<int>();
+        int offset = new Random().Next(256, 512);
 
-        sector.Add(new Random().Next(256, 512));
-        
-        sector.Add(sector[0] - input.Length);
+        List<int> sector = [offset, offset - input.Length];
         
         foreach (char character in input)
         {
